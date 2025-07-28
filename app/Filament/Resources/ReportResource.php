@@ -140,13 +140,8 @@ class ReportResource extends Resource
                         'pending' => 'Pending',
                         'success' => 'Success',
                         'settlement' => 'Settlement',
-                        'challenge' => 'Challenge',
                         'deny' => 'Ditolak',
-                        'expire' => 'Kedaluwarsa',
                         'cancel' => 'Dibatalkan',
-                        'refund' => 'Dikembalikan',
-                        'partial_refund' => 'Pengembalian Sebagian',
-                        'authorize' => 'Diotorisasi',
                     ])
                     ->label('Status Pembayaran'),
                 SelectFilter::make('payment_type')
