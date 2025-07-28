@@ -22,15 +22,6 @@
                     {{ $product->nama_produk }}
                 </h1>
                 <p class="mb-4 text-3xl font-bold text-primary">IDR {{ number_format($product->harga, 0, ',', '.') }}</p>
-                <div class="flex items-center mb-4 text-gray-600">
-                    {{-- Ini masih hardcoded, bisa Anda dinamiskkan juga jika ada rating di model product --}}
-                    <i class="mr-1 fas fa-star text-primary"></i>
-                    <i class="mr-1 fas fa-star text-primary"></i>
-                    <i class="mr-1 fas fa-star text-primary"></i>
-                    <i class="mr-1 fas fa-star text-primary"></i>
-                    <i class="mr-2 fas fa-star-half-alt text-primary"></i>
-                    <span>(4.5/5 Bintang)</span>
-                </div>
                 <p class="mb-6 leading-relaxed text-gray-700">
                     {{ $product->deskripsi }}
                 </p>

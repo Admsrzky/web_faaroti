@@ -109,7 +109,7 @@
     <table>
         <thead>
             <tr>
-                <th>ID Transaksi</th>
+                <th>No</th>
                 <th>TRX ID</th>
                 <th>Nama Pelanggan</th>
                 <th>Qty</th>
@@ -125,7 +125,7 @@
         <tbody>
             @foreach ($transactions as $transaction)
                 <tr>
-                    <td class="text-center">{{ $transaction->id }}</td>
+                    <td class="text-center">{{ $loop->iteration }}</td>
                     <td>{{ $transaction->trx_id }}</td>
                     <td>{{ $transaction->name }}</td>
                     <td class="text-center">{{ $transaction->total_quantity }}</td>

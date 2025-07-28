@@ -123,6 +123,39 @@ class TransactionResource extends Resource
                     ->sortable(),
             ])
             ->filters([
+                Tables\Filters\SelectFilter::make('tanggal_acara_month')
+                    ->label('Bulan Acara')
+                    ->options(function () {
+                        $months = [];
+                        for ($i = 1; $i <= 12; $i++) {
+                            $months[$i] = \Carbon\Carbon::createFromDate(null, $i, 1)->locale('id')->monthName;
+                        }
+                        return $months;
+                    })
+                    ->query(function (\Illuminate\Database\Eloquent\Builder $query, array $data): \Illuminate\Database\Eloquent\Builder {
+                        if (isset($data['value'])) {
+                            $query->whereMonth('created_at', $data['value']);
+                        }
+                        return $query;
+                    }),
+
+                Tables\Filters\SelectFilter::make('tanggal_acara_year')
+                    ->label('Tahun Acara')
+                    ->options(function () {
+                        $years = [];
+                        $currentYear = \Carbon\Carbon::now()->year;
+                        for ($i = $currentYear - 5; $i <= $currentYear + 5; $i++) {
+                            $years[$i] = $i;
+                        }
+                        return $years;
+                    })
+                    ->query(function (\Illuminate\Database\Eloquent\Builder $query, array $data): \Illuminate\Database\Eloquent\Builder {
+                        if (isset($data['value'])) {
+                            $query->whereYear('created_at', $data['value']);
+                        }
+                        return $query;
+                    }),
+
                 SelectFilter::make('status')
                     ->options([
                         'pending' => 'Pending',
