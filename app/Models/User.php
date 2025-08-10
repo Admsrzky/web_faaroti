@@ -72,8 +72,22 @@ class User extends Authenticatable
         return $this->hasMany(Transaction::class);
     }
 
-    public function canAccessPanel(Panel $panel): bool
+    // Implementasi method untuk FilamentUser
+    public function canAccessFilament(): bool
+    {
+        // Izinkan akses Filament jika user memiliki role 'admin' atau 'super_admin'
+        return $this->isAdmin();
+    }
+
+    public function isAdmin(): bool
     {
         return $this->role === 'admin';
+        // Atau jika menggunakan Enum: return $this->role === \App\Enums\UserRoleEnum::Admin || $this->role === \App\Enums\UserRoleEnum::SuperAdmin;
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === 'admin';
+        // Atau jika menggunakan Enum: return $this->role === \App\Enums\UserRoleEnum::SuperAdmin;
     }
 }
