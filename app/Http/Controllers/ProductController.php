@@ -9,12 +9,26 @@ use Illuminate\Support\Facades\Log; // Ditambahkan untuk logging jika diperlukan
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Ambil semua produk, bisa ditambahkan pagination jika jumlahnya sangat banyak
-        $allProducts = Product::orderBy('nama_produk', 'asc')->get();
-        // Atau dengan pagination:
-        // $allProducts = Product::orderBy('nama_produk', 'asc')->paginate(12); // Menampilkan 12 produk per halaman
+        // Mulai query builder
+        $query = Product::query();
+
+        // Logika untuk menangani penyortiran dari dropdown
+        if ($request->get('sort') == 'harga_asc') {
+            $query->orderBy('harga', 'asc');
+        } elseif ($request->get('sort') == 'harga_desc') {
+            $query->orderBy('harga', 'desc');
+        } elseif ($request->get('sort') == 'nama_asc') {
+            $query->orderBy('nama_produk', 'asc');
+        } else {
+            // Urutan default: tampilkan produk terbaru lebih dulu
+            $query->latest();
+        }
+
+        // Ambil hasil dengan PAGINASI, bukan get()
+        // Angka 12 adalah jumlah produk per halaman, bisa Anda ubah
+        $allProducts = $query->paginate(12);
 
         return view('product.index', compact('allProducts'));
     }

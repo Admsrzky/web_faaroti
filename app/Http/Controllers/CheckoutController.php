@@ -384,4 +384,24 @@ class CheckoutController extends Controller
 
         return view('order.history', compact('transactions'));
     }
+
+    public function complete(Transaction $transaction)
+    {
+        // 1. Otorisasi: Pastikan hanya pemilik pesanan yang bisa mengubah status
+        if (Auth::id() !== $transaction->user_id) {
+            abort(403, 'Anda tidak diizinkan untuk melakukan aksi ini.');
+        }
+
+        // 2. Validasi: Pastikan status saat ini adalah 'dikirim'
+        if ($transaction->status !== 'dikirim') {
+            return redirect()->route('order.history')->with('error', 'Status pesanan tidak dapat diubah.');
+        }
+
+        // 3. Update Status
+        $transaction->status = 'selesai';
+        $transaction->save();
+
+        // 4. Redirect dengan pesan sukses
+        return redirect()->route('order.history')->with('success', 'Terima kasih! Pesanan #' . $transaction->id . ' telah ditandai sebagai selesai.');
+    }
 }

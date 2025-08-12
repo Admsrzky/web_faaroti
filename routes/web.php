@@ -52,6 +52,7 @@ Route::middleware([
 
     // Route untuk riwayat pesanan (hanya satu, di dalam middleware auth)
     Route::get('/riwayat-pesanan', [CheckoutController::class, 'RiwayatPesanan'])->name('order.history');
+    Route::patch('/order/{transaction}/complete', [CheckoutController::class, 'complete'])->name('order.complete');
 });
 
 

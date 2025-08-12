@@ -1,122 +1,112 @@
-@extends('layouts.master') {{-- Menggunakan layout utama yang sama --}}
+@extends('layouts.master')
 
-@section('title', 'Keranjang Belanja - Faa Roti') {{-- Menetapkan judul khusus untuk halaman ini --}}
-@section('description',
-    'Lihat dan kelola item di keranjang belanja Anda. Lanjutkan ke pembayaran untuk menyelesaikan
-    pesanan di Faa Roti.')
-    {{-- Anda bisa menambahkan atau mengganti meta lainnya di sini --}}
+@section('title', 'Keranjang Belanja - Faa Roti')
+@section('description', 'Lihat dan kelola item di keranjang belanja Anda. Lanjutkan ke pembayaran untuk menyelesaikan pesanan di Faa Roti.')
 
 @section('content')
-    <div class="container py-32 mx-auto">
-        <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
-            <div class="lg:col-span-2">
-                <div class="p-6 bg-white rounded-lg shadow-md animate__animated animate__fadeInUp" data-wow-delay="0.1s">
-                    <h2 class="mb-6 text-2xl font-bold text-gray-900">
-                        Isi Keranjang Anda
-                    </h2>
-
-                    @if ($cartItems->isEmpty())
-                        <p class="py-8 text-center text-gray-600">Keranjang belanja Anda kosong.</p>
-                    @else
-                        @foreach ($cartItems as $item)
-                            <div class="flex items-center py-4 border-b border-gray-200 last:border-b-0">
-                                <div class="flex-shrink-0 w-24 h-24 overflow-hidden border border-gray-200 rounded-md">
-                                    <img src="{{ asset('storage/' . $item->product->foto_produk) }}"
-                                        alt="{{ $item->product->nama_produk }}"
-                                        class="object-cover object-center w-full h-full" />
-                                </div>
-                                <div class="flex flex-col flex-1 ml-4">
-                                    <div>
-                                        <div class="flex justify-between text-base font-medium text-gray-900">
-                                            <h3><a
-                                                    href="{{ route('product.index', $item->product->id) }}">{{ $item->product->nama_produk }}</a>
+    <div class="container px-4 py-16 mx-auto sm:px-6 lg:px-8">
+        @if ($cartItems->isEmpty())
+            {{-- Tampilan Keranjang Kosong yang Lebih Baik --}}
+            <div class="py-24 text-center bg-white rounded-lg shadow-md animate__animated animate__fadeInUp">
+                <div class="flex justify-center mb-4">
+                    <i class="text-6xl text-gray-300 fas fa-shopping-cart"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800">Keranjang Anda Kosong</h2>
+                <p class="mt-2 text-gray-500">Sepertinya Anda belum menambahkan produk apa pun.</p>
+                <a href="{{ route('product.index') }}" class="inline-block px-8 py-3 mt-6 font-semibold text-white transition-transform duration-300 rounded-full bg-primary hover:bg-primary-dark hover:scale-105">
+                    Mulai Belanja
+                </a>
+            </div>
+        @else
+            <div class="grid grid-cols-1 gap-12 lg:grid-cols-3">
+                {{-- Daftar Item Keranjang --}}
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-lg shadow-md animate__animated animate__fadeInUp" data-wow-delay="0.1s">
+                        <h2 class="p-6 text-2xl font-bold text-gray-900 border-b">
+                            Isi Keranjang Anda ({{ $cartItems->count() }} item)
+                        </h2>
+                        <div class="divide-y divide-gray-200">
+                            @foreach ($cartItems as $item)
+                                {{-- Kartu Item yang Responsif --}}
+                                <div class="flex flex-col p-6 sm:flex-row">
+                                    <div class="flex-shrink-0 w-32 h-32 mx-auto sm:mx-0 sm:w-24 sm:h-24">
+                                        <img src="{{ asset('storage/' . $item->product->foto_produk) }}" alt="{{ $item->product->nama_produk }}" class="object-cover w-full h-full rounded-md" />
+                                    </div>
+                                    <div class="flex flex-col flex-1 mt-4 text-center sm:ml-6 sm:mt-0 sm:text-left">
+                                        <div class="flex flex-col justify-between sm:flex-row">
+                                            <h3 class="text-lg font-semibold text-gray-800">
+                                                <a href="{{ route('product.show', $item->product->id) }}" class="hover:text-primary">{{ $item->product->nama_produk }}</a>
                                             </h3>
-                                            <p class="ml-4">Rp
-                                                {{ number_format($item->product->harga * $item->quantity, 0, ',', '.') }}
-                                            </p>
+                                            <p class="mt-1 font-semibold text-gray-900 sm:ml-4 sm:mt-0">Rp {{ number_format($item->product->harga * $item->quantity, 0, ',', '.') }}</p>
                                         </div>
-                                        <p class="mt-1 text-sm text-gray-500">{{ $item->product->deskripsi }}</p>
-                                    </div>
-                                    <div class="flex items-end justify-between flex-1 mt-2 text-sm">
-                                        {{-- Form untuk memperbarui kuantitas --}}
-                                        <form action="{{ route('cart.updateQuantity', $item->id) }}" method="POST"
-                                            class="flex items-center">
-                                            @csrf
-                                            @method('PUT') {{-- Gunakan metode PUT untuk update --}}
-                                            <label for="quantity-{{ $item->id }}" class="mr-2">Kuantitas:</label>
-                                            <input type="number" id="quantity-{{ $item->id }}" name="quantity"
-                                                value="{{ $item->quantity }}" min="1"
-                                                max="{{ $item->product->stok }}"
-                                                class="w-16 px-2 py-1 text-center border border-gray-300 rounded-md quantity-input" />
-                                            <button type="submit"
-                                                class="px-3 py-1 ml-2 text-xs text-white bg-blue-500 rounded-md hover:bg-blue-600">Update</button>
-                                        </form>
+                                        <p class="mt-1 text-sm text-gray-500">Harga Satuan: Rp {{ number_format($item->product->harga, 0, ',', '.') }}</p>
 
-                                        {{-- Form untuk menghapus item --}}
-                                        <form action="{{ route('cart.remove', $item->id) }}" method="POST" class="flex">
-                                            @csrf
-                                            @method('DELETE') {{-- Gunakan metode DELETE untuk hapus --}}
-                                            <button type="submit" class="font-medium text-red-600 hover:text-red-800">
-                                                Hapus
-                                            </button>
-                                        </form>
+                                        {{-- Baris Aksi (Update & Hapus) --}}
+                                        <div class="flex items-center justify-center mt-4 space-x-4 sm:justify-start">
+                                            <form action="{{ route('cart.updateQuantity', $item->id) }}" method="POST" class="flex items-center">
+                                                @csrf
+                                                @method('PUT')
+                                                <label for="quantity-{{ $item->id }}" class="sr-only">Kuantitas</label>
+                                                <input type="number" id="quantity-{{ $item->id }}" name="quantity" value="{{ $item->quantity }}" min="1" max="{{ $item->product->stok }}" class="w-20 px-2 py-1 text-center border-gray-300 rounded-md shadow-sm quantity-input focus:ring-primary focus:border-primary" onchange="this.form.submit()" />
+                                            </form>
+
+                                            <form action="{{ route('cart.remove', $item->id) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-gray-400 transition-colors hover:text-red-600" title="Hapus item">
+                                                    <i class="text-xl fas fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        </div>
                                     </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Ringkasan Belanja --}}
+                <div class="lg:col-span-1">
+                    <div class="sticky top-28">
+                        <div class="p-6 bg-white rounded-lg shadow-md animate__animated animate__fadeInUp" data-wow-delay="0.3s">
+                            <h2 class="pb-4 mb-4 text-2xl font-bold text-gray-900 border-b">
+                                Ringkasan Belanja
+                            </h2>
+                            <div class="space-y-2 text-gray-700">
+                                <div class="flex justify-between">
+                                    <p>Subtotal</p>
+                                    <p class="font-semibold">Rp {{ number_format($subtotal, 0, ',', '.') }}</p>
+                                </div>
+                                <div class="flex justify-between">
+                                    <p>Ongkos Kirim</p>
+                                    <p class="font-semibold">Rp {{ number_format($shippingCost, 0, ',', '.') }}</p>
                                 </div>
                             </div>
-                        @endforeach
-                    @endif
-                </div>
-            </div>
+                            <div class="flex justify-between pt-4 mt-4 text-xl font-bold text-gray-900 border-t border-gray-300">
+                                <p>Total</p>
+                                <p>Rp {{ number_format($total, 0, ',', '.') }}</p>
+                            </div>
 
-            <div class="lg:col-span-1">
-                <div class="p-6 bg-white rounded-lg shadow-md animate__animated animate__fadeInUp" data-wow-delay="0.3s">
-                    <h2 class="mb-6 text-2xl font-bold text-gray-900">
-                        Ringkasan Belanja
-                    </h2>
-                    <div class="py-4 border-t border-gray-200">
-                        <div class="flex justify-between mb-2 text-base font-medium text-gray-900">
-                            <p>Subtotal</p>
-                            <p>Rp {{ number_format($subtotal, 0, ',', '.') }}</p>
+                            <div class="mt-8 space-y-4">
+                                <a href="{{ route('order.checkout') }}" class="block w-full px-6 py-3 text-lg font-semibold text-center text-white transition-transform duration-300 rounded-full bg-primary hover:bg-primary-dark hover:scale-105">Lanjut ke Checkout</a>
+                                <a href="{{ route('product.index') }}" class="block w-full px-6 py-3 text-lg font-semibold text-center transition-colors duration-300 border rounded-full border-primary text-primary hover:bg-primary hover:text-white">Lanjutkan Belanja</a>
+                            </div>
                         </div>
-                        <div class="flex justify-between mb-2 text-base font-medium text-gray-900">
-                            <p>Ongkos Kirim</p>
-                            <p>Rp {{ number_format($shippingCost, 0, ',', '.') }}</p>
-                        </div>
-                        <div
-                            class="flex justify-between pt-4 mt-4 text-xl font-bold text-gray-900 border-t border-gray-300">
-                            <p>Total</p>
-                            <p>Rp {{ number_format($total, 0, ',', '.') }}</p>
-                        </div>
-                    </div>
-
-                    <div class="mt-6 text-center">
-                        <a href="{{ route('order.checkout') }}"
-                            class="block w-full px-6 py-3 text-lg font-semibold text-white transition-colors duration-300 rounded-full bg-primary hover:bg-primary-dark">Checkout</a>
-                    </div>
-                    <div class="mt-4 text-center">
-                        <p class="text-sm text-gray-500">
-                            atau
-                            <a href="{{ route('product.index') }}"
-                                class="font-medium text-primary hover:text-primary-dark">Lanjutkan Belanja</a>
-                        </p>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
     </div>
 
-    {{-- Untuk menampilkan pesan sukses/error --}}
-    @if (session('success'))
-        <div
-            class="fixed p-4 text-white bg-green-500 rounded-lg shadow-lg bottom-4 right-4 animate__animated animate__fadeInUp">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if (session('error'))
-        <div
-            class="fixed p-4 text-white bg-red-500 rounded-lg shadow-lg bottom-4 right-4 animate__animated animate__fadeInUp">
-            {{ session('error') }}
+    {{-- Notifikasi Toast --}}
+    @if (session('success') || session('error'))
+        @php
+            $isSuccess = session('success');
+            $message = $isSuccess ? session('success') : session('error');
+            $bgColor = $isSuccess ? 'bg-green-500' : 'bg-red-500';
+        @endphp
+        <div class="toast-notification fixed p-4 text-white rounded-lg shadow-lg bottom-5 left-5 right-5 sm:left-auto sm:w-auto sm:max-w-sm animate__animated animate__fadeInUp {{ $bgColor }}">
+            {{ $message }}
         </div>
     @endif
 @endsection
@@ -124,33 +114,23 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Script untuk menghilangkan pesan sukses/error setelah beberapa detik
-            const successMessage = document.querySelector('.bg-green-500');
-            const errorMessage = document.querySelector('.bg-red-500');
-
-            if (successMessage) {
+            // Script untuk menghilangkan pesan notifikasi
+            const toast = document.querySelector('.toast-notification');
+            if (toast) {
                 setTimeout(() => {
-                    successMessage.classList.remove('animate__fadeInUp');
-                    successMessage.classList.add('animate__fadeOutDown');
-                    setTimeout(() => successMessage.remove(), 500); // Hapus setelah animasi selesai
-                }, 3000); // Hilangkan setelah 3 detik
+                    toast.classList.remove('animate__fadeInUp');
+                    toast.classList.add('animate__fadeOutDown');
+                    setTimeout(() => toast.remove(), 500);
+                }, 4000);
             }
 
-            if (errorMessage) {
-                setTimeout(() => {
-                    errorMessage.classList.remove('animate__fadeInUp');
-                    errorMessage.classList.add('animate__fadeOutDown');
-                    setTimeout(() => errorMessage.remove(), 500); // Hapus setelah animasi selesai
-                }, 3000); // Hilangkan setelah 3 detik
-            }
-
-            // JavaScript untuk mengirim form update kuantitas saat input berubah
-            // Ini dihapus karena kita sudah punya tombol "Update" yang akan submit form
-            // document.querySelectorAll('.quantity-input').forEach(input => {
-            //     input.addEventListener('change', function() {
-            //         this.closest('form').submit(); // Submit form terdekat
-            //     });
-            // });
+            // Script untuk auto-submit form saat kuantitas diubah
+            // Ini membuat pengguna tidak perlu klik tombol "Update" manual
+            document.querySelectorAll('.quantity-input').forEach(input => {
+                input.addEventListener('change', function() {
+                    this.closest('form').submit();
+                });
+            });
         });
     </script>
 @endpush
