@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+// Pastikan Model User di-import
+use App\Models\User;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\Widgets;
@@ -10,7 +12,6 @@ use Filament\Support\Colors\Color;
 use Filament\Http\Middleware\Authenticate;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
-use Filament\Http\Middleware\AuthenticateSession;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -41,8 +42,6 @@ class AdminPanelProvider extends PanelProvider
                 Pages\Dashboard::class,
             ])
             ->widgets([
-                // Widgets\AccountWidget::class,
-                // Widgets\FilamentInfoWidget::class,
                 CardTotal::class,
                 ChartPenjualan::class,
                 RiwayatPenjualan::class,
@@ -52,7 +51,6 @@ class AdminPanelProvider extends PanelProvider
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
-                AuthenticateSession::class,
                 ShareErrorsFromSession::class,
                 VerifyCsrfToken::class,
                 SubstituteBindings::class,
@@ -61,6 +59,10 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            // PERUBAHAN ADA DI SINI: Memanggil method isAdmin() dari model User
+            ->gate(function (User $user) {
+                return $user->isAdmin();
+            });
     }
 }
