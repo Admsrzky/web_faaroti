@@ -2,8 +2,6 @@
 
 namespace App\Providers\Filament;
 
-// Pastikan Model User di-import
-use App\Models\User;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\Widgets;
@@ -59,10 +57,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ])
-            // PERUBAHAN ADA DI SINI: Memanggil method isAdmin() dari model User
-            ->gate(function (User $user) {
-                return $user->isAdmin();
-            });
+            ]); // <-- INI HARUS JADI BARIS TERAKHIR.
+        // PASTIKAN TIDAK ADA ->gate(...) DI BAWAHNYA.
     }
 }
