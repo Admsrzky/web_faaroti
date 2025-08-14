@@ -17,7 +17,4 @@ php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 
-# 6. Matikan maintenance mode
-php artisan up
-
 echo "Deployment selesai!"
