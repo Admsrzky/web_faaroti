@@ -18,7 +18,7 @@
                     </p>
                     {{-- Ukuran font lebih responsif --}}
                     <h1 class="mb-4 text-4xl font-extrabold text-white sm:text-5xl lg:text-7xl animate__animated animate__slideInDown">
-                        Kami Membuat Dengan Penuh Gairahhh
+                        Kami Membuat Dengan Penuh Gairahh
                     </h1>
                     <p class="pb-3 mb-6 text-base text-white sm:text-lg lg:text-xl animate__animated animate__fadeInUp">
                         Kelembutan dan kelimpahan topping-nya tak tertandingi.
