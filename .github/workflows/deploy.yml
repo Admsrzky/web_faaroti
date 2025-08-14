@@ -1,43 +1,25 @@
-# Nama workflow yang akan tampil di tab Actions GitHub
-name: Deploy to VPS
+name: Deploy
 
-# Pemicu (trigger) workflow
+# Trigger the workflow on push and
+# pull request events on the master branch
 on:
   push:
-    branches:
-      - main # Ganti dengan 'master' jika branch utama Anda master
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
 
+# Authenticate to the the server via ssh
+# and run our deployment script
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Deploy to VPS via SSH
-        # Gunakan versi rilis yang stabil, bukan @master
-        uses: appleboy/ssh-action@v1.0.3
+      - uses: actions/checkout@v3
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.VPS_SSH_HOST }}
-          username: ${{ secrets.VPS_SSH_USERNAME }}
-          key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
-          script: |
-            # Masuk ke direktori project di VPS Anda
-            cd /var/www/faaroti.shop/faaroti/
-
-            # Tarik perubahan terbaru dari branch main
-            git pull origin main
-
-            echo "Code pulled successfully."
-
-            # ------------------------------------------------------------------
-            # !!! PENTING: UNCOMMENT DAN SESUAIKAN BAGIAN DI BAWAH INI !!!
-            # Setelah kode diperbarui, aplikasi Anda perlu di-restart agar
-            # perubahan bisa aktif. Pilih yang sesuai dengan project Anda.
-            # ------------------------------------------------------------------
-
-            # Contoh untuk project PHP/Laravel (jika menggunakan FPM)
-            echo "Restarting PHP-FPM..."
-            sudo systemctl restart php8.3-fpm
-
-            echo "Deployment complete! ✅"
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.SSHKEY }}
+          script: "cd /var/www/faaroti.shop/faaroti && ./.scripts/deploy.sh"
