@@ -1,0 +1,59 @@
+# Nama workflow yang akan tampil di tab Actions GitHub
+name: Deploy to VPS
+
+# Pemicu (trigger) workflow
+# Workflow ini akan berjalan setiap kali ada push ke branch 'main'
+on:
+  push:
+    branches:
+      - main # Ganti dengan 'master' jika branch utama Anda master
+
+# Daftar pekerjaan (jobs) yang akan dijalankan
+jobs:
+  deploy:
+    # Menentukan sistem operasi untuk runner
+    runs-on: ubuntu-latest
+
+    # Langkah-langkah yang akan dieksekusi
+    steps:
+      # Langkah 1: Checkout kode dari repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Langkah 2: Deploy ke VPS menggunakan SSH
+      - name: Deploy to VPS via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_SSH_HOST }}
+          username: ${{ secrets.VPS_SSH_USERNAME }}
+          key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+          script: |
+            # Masuk ke direktori project di VPS Anda
+            cd /var/www/faaroti.shop/faaroti/  # <--- GANTI DENGAN PATH PROJECT ANDA DI VPS
+
+            # Tarik perubahan terbaru dari branch main
+            git pull origin main
+
+            # ------------------------------------------------------------------
+            # TAMBAHKAN PERINTAH LAIN YANG DIPERLUKAN DI SINI
+            # ------------------------------------------------------------------
+
+            # Contoh untuk project Node.js (misalnya dengan PM2)
+            # echo "Installing dependencies..."
+            # npm install
+            # echo "Restarting application..."
+            # pm2 restart nama-aplikasi-anda
+
+            # Contoh untuk project Laravel (PHP)
+            # echo "Installing composer dependencies..."
+            # composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
+            # echo "Running migrations..."
+            # php artisan migrate --force
+
+            # Contoh untuk project Python (Django/Flask)
+            # echo "Installing pip dependencies..."
+            # pip install -r requirements.txt
+            # echo "Restarting gunicorn service..."
+            # sudo systemctl restart gunicorn
+
+            echo "Deployment complete! ✅"
