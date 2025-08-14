@@ -22,4 +22,12 @@ jobs:
           username: ${{ secrets.USERNAME }}
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSHKEY }}
-          script: "cd /var/www/faaroti.shop/faaroti && ./.scripts/deploy.sh"
+          script: |
+            # 1. Pindah ke direktori proyek Anda
+            cd /var/www/faaroti.shop/faaroti
+
+            # 2. Tambahkan izin eksekusi pada skrip
+            chmod +x ./.scripts/deploy.sh
+
+            # 3. Jalankan skrip deployment
+            ./.scripts/deploy.sh
