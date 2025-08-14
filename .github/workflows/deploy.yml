@@ -37,15 +37,7 @@ jobs:
             # ------------------------------------------------------------------
 
             # Contoh untuk project PHP/Laravel (jika menggunakan FPM)
-            # echo "Restarting PHP-FPM..."
-            # sudo systemctl restart php8.2-fpm
-
-            # Contoh untuk project Node.js (jika menggunakan PM2)
-            # echo "Restarting Node.js application..."
-            # pm2 restart nama_aplikasi_anda
-
-            # Contoh untuk project Python (jika menggunakan Gunicorn/Systemd)
-            # echo "Restarting Gunicorn service..."
-            # sudo systemctl restart gunicorn
+            echo "Restarting PHP-FPM..."
+            sudo systemctl restart php8.3-fpm
 
             echo "Deployment complete! ✅"
