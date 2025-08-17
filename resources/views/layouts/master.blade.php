@@ -62,11 +62,11 @@
 
     {{-- HEADER START (Disederhanakan untuk Mobile) --}}
     <header class="relative animate__animated animate__fadeIn" data-wow-delay="0.1s">
-        <nav class="fixed top-0 left-0 right-0 z-50 px-4 py-3 bg-white shadow-md lg:py-0 lg:px-12">
+        <nav class="fixed top-0 left-0 right-0 z-50 px-4 py-2 bg-white shadow-md lg:py-0 lg:px-12">
             <div class="container flex items-center justify-between mx-auto">
                 {{-- Logo --}}
                 <a href="{{ route('home') }}" class="flex items-center flex-shrink-0 gap-2">
-                    <img src="{{ asset('assets/img/logo2.png') }}" width="90" height="90" alt="Faa Roti Logo" />
+                    <img src="{{ asset('assets/img/logo2.png') }}" width="80" height="80" alt="Faa Roti Logo" />
                     <h1 class="hidden m-0 text-3xl sm:block text-primary font-playfair">Faa Roti</h1>
                 </a>
 
