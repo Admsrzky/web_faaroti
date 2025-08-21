@@ -29,7 +29,7 @@
                         </div>
                         <div>
                             <h5 class="mb-1 text-xl font-semibold text-gray-800">Telepon</h5>
-                            <p class="text-gray-700">+012 345 67890</p>
+                            <p class="text-gray-700">+62 811-1201-3935</p>
                         </div>
                     </div>
                     <div class="flex items-start p-4 bg-white border border-gray-200 rounded-lg shadow-md">
