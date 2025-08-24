@@ -8,7 +8,7 @@ use Filament\Widgets\TableWidget as BaseWidget;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 
-class LatestOrder extends BaseWidget
+class RiwayatPemesanan extends BaseWidget
 {
     protected static ?string $heading = 'Pesanan Terbaru'; // Judul untuk widget tabel
     protected static ?int $sort = 4; // Atur urutan widget di dashboard (setelah Riwayat Penjualan)

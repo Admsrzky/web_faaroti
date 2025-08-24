@@ -18,7 +18,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use App\Filament\Resources\DashboardResource\Widgets\CardTotal;
 use App\Filament\Resources\DashboardResource\Widgets\ChartPenjualan;
-use App\Filament\Resources\DashboardResource\Widgets\LatestOrder;
+use App\Filament\Resources\DashboardResource\Widgets\RiwayatPemesanan;
 use App\Filament\Resources\DashboardResource\Widgets\RiwayatPenjualan;
 
 class AdminPanelProvider extends PanelProvider
@@ -43,7 +43,7 @@ class AdminPanelProvider extends PanelProvider
                 CardTotal::class,
                 ChartPenjualan::class,
                 RiwayatPenjualan::class,
-                LatestOrder::class,
+                RiwayatPemesanan::class,
             ])
             ->middleware([
                 EncryptCookies::class,
