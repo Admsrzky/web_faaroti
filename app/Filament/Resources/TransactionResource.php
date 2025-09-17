@@ -24,6 +24,8 @@ class TransactionResource extends Resource
 {
     protected static ?string $model = Transaction::class;
 
+    protected static ?int $newPendingOrdersCount = null;
+
     protected static ?int $navigationSort = 3;
 
     protected static ?string $navigationIcon = 'heroicon-o-receipt-percent';
@@ -261,6 +263,30 @@ class TransactionResource extends Resource
             // 'create' => Pages\CreateTransaction::route('/create'),
             // 'edit' => Pages\EditTransaction::route('/{record}/edit'),
         ];
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        // Check if the count has already been calculated for this request.
+        if (is_null(static::$newPendingOrdersCount)) {
+            // Calculate and cache the count of transactions that are 'pending' AND created today.
+            static::$newPendingOrdersCount = static::getModel()::where('status', 'pending')
+                ->whereDate('created_at', today())
+                ->count();
+        }
+
+        // Return the count as a string if it's greater than 0, otherwise return null.
+        return static::$newPendingOrdersCount > 0 ? (string) static::$newPendingOrdersCount : null;
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        // Check the cached count to determine the color.
+        if (static::$newPendingOrdersCount > 0) {
+            return 'success'; // Warna hijau untuk pesanan baru
+        }
+
+        return null;
     }
 
     // Menonaktifkan tombol 'Create' di halaman daftar

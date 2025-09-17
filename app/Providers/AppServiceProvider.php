@@ -6,6 +6,8 @@ use App\Models\Cart;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
+use App\Models\Transaction; // Import model Transaction
+use App\Observers\TransactionObserver; // Import observer
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -31,5 +33,8 @@ class AppServiceProvider extends ServiceProvider
             // Meneruskan variabel $cartItemCount ke view
             $view->with('cartItemCount', $cartItemCount);
         });
+
+        Transaction::observe(TransactionObserver::class);
+
     }
 }

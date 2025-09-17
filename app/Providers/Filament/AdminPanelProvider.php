@@ -5,6 +5,7 @@ namespace App\Providers\Filament;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\Widgets;
+use App\Filament\Widgets\NewOrderModal; // <-- Tambahkan 'use' statement di atas
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Http\Middleware\Authenticate;
@@ -30,6 +31,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->broadcasting()
             ->brandName('Admin Faa Roti')
             ->colors([
                 'primary' => Color::Amber,
@@ -40,6 +42,7 @@ class AdminPanelProvider extends PanelProvider
                 Pages\Dashboard::class,
             ])
             ->widgets([
+                NewOrderModal::class, // <-- TAMBAHKAN WIDGET INI
                 CardTotal::class,
                 ChartPenjualan::class,
                 RiwayatPenjualan::class,
