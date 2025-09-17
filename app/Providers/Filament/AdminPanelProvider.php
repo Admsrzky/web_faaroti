@@ -42,7 +42,6 @@ class AdminPanelProvider extends PanelProvider
                 Pages\Dashboard::class,
             ])
             ->widgets([
-                NewOrderModal::class, // <-- TAMBAHKAN WIDGET INI
                 CardTotal::class,
                 ChartPenjualan::class,
                 RiwayatPenjualan::class,
